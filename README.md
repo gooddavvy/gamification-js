@@ -8,7 +8,7 @@ This is a 3D Node.js package that makes your web apps get gamified, looking like
 
 In order to use this package, you'll need to install it. Here are the installation steps.
 
-1. **Add a line of code to `package.json`.** Add this line of code to the `devDependencies` of your `package.json` file: `"gamification-js": github:gooddavvy/gamification-js`.
+1. **Add a line of code to `package.json`.** Add this line of code to the `devDependencies` of your `package.json` file: `"gamification-js": "github:gooddavvy/gamification-js"`.
 2. **Install.** Next, run this command in your terminal so that the changes from your `package.json` file takes effect: `npm install`.
 
 ## Simple Gamification Server
