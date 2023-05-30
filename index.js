@@ -19,7 +19,7 @@ class Server {
                 req, res, draw(objectProps) {
                     var { objectType } = objectProps;
                     if (objectType === "cube") {
-                        res.send("<p>this is a text cube</p>");
+                        return "<p>this is a text cube</p>";
                     }
                 }
             };
