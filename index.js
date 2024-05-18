@@ -29,7 +29,9 @@ class Server {
 
     /// to listen to the server
     listen(port, callback) {
-        app.listen(parseInt(port.replace(":", "")), callback);
+        app.listen(parseInt(port.replace(":", "")), () => {
+            callback();
+        });
     }
 }
 
