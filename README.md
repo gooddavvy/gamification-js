@@ -1,6 +1,6 @@
 # What is GamificationJS?
 
-This is a 3D Node.js package that makes your web apps get gamified, looking like animation--and it was inspired by GoLang Fiber and Express.js; but remember it is still in progress. This package is very fun and easy to use, and I recommend you try it out!
+This is a 3D Node.js package that makes your web apps get gamified, looking like animation--and it was inspired by GoLang Fiber and Express.js; but remember it is still in progress. It saves a developers time by writing most of the CSS and letting the developer worry only about the logic. This package is very fun and easy to use, and I recommend you try it out!
 
 # Docs
 
@@ -16,7 +16,7 @@ In order to use this package, you'll need to install it. Here are the installati
 Now write this in your Node.js file:
 
 ```js
-var Gamification = require("gamification-js");
+var Gamification = require("./");
 var app = new Gamification.Server();
 
 app.variables.port = ":8080";
@@ -25,22 +25,25 @@ app.get("/", (ctx) => {
           ${ctx.title("My First GamificationJS App!")}
           <h1>Hello, GamificationJS!</h1>
           <p>This is the home page.</p>
-      `);
+    `);
 });
 app.get("/draw", (ctx) => {
   ctx.res.send(`
         ${ctx.title("Drawing with GamificationJS")}
+        ${ctx.setTheme("dark")}
+        ${ctx.setFontFamily("Arial")}
         <h1>This is a cube!</h1>
         ${ctx.draw({
           objectShape: "cube",
+          backgroundColor: "gray",
           labels: { front: "My Frontie Front!!!" },
         })}
         <br />
         <h1>And this is a rectangle!</h1>
-        ${ctx.draw({ objectShape: "rectangle" })}
+        ${ctx.draw({ objectShape: "rectangle", backgroundColor: "gray" })}
     `);
 });
-app.listen(app.variables.port, () => console.log("server started"));
+app.run(app.variables.port, () => console.log("server started"));
 ```
 
 In this code, `:8080` represents that the port for the server is 8080. You can change this port to the port you want for your app, or leave it like that.

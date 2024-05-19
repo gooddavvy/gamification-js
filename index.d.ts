@@ -2,14 +2,13 @@ import type { Request as Request_, Response as Response_ } from "express";
 
 export type Request = Request_
 export type Response = Response_
-
 export interface ObjectProps {
     objectShape: "rectangle" | "cube";
     width?: number;
     height?: number;
     backgroundColor?: string;
     labels?: {
-        [key: "front" | "back" | "right" | "left" | "top" | "bottom"]: string;
+        [key: string]: string;
     }
 }
 
