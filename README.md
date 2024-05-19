@@ -6,7 +6,7 @@ This is a 3D Node.js package that makes your web apps get gamified, looking like
 
 **Installation:**
 
-In order to use this package, you'll need to install it. It's farily simple to install, just run this in your terminal:
+In order to use this package, you'll need to install it. It's fairly simple to install, just run this in your terminal:
 
 ```
 npm install --save-dev gooddavvy/gamification-js
