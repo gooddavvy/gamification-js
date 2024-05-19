@@ -16,7 +16,7 @@ In order to use this package, you'll need to install it. Here are the installati
 Now write this in your Node.js file:
 
 ```js
-var Gamification = require("./");
+var Gamification = require("gamification-js");
 var app = new Gamification.Server();
 
 app.variables.port = ":8080";
