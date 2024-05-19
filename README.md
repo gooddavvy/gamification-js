@@ -20,14 +20,14 @@ var Gamification = require("gamification-js");
 var app = new Gamification.Server();
 
 app.variables.port = ":8080";
-app.get("/", (ctx) => {
+app.get("/", ctx => {
   ctx.res.send(`
           ${ctx.title("My First GamificationJS App!")}
           <h1>Hello, GamificationJS!</h1>
           <p>This is the home page.</p>
     `);
 });
-app.get("/draw", (ctx) => {
+app.get("/draw", ctx => {
   ctx.res.send(`
         ${ctx.title("Drawing with GamificationJS")}
         ${ctx.setTheme("dark")}
