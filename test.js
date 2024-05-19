@@ -7,7 +7,7 @@ app.get("/", ctx => {
           ${ctx.title("My First GamificationJS App!")}
           <h1>Hello, GamificationJS!</h1>
           <p>This is the home page.</p>
-      `);
+    `);
 
 });
 app.get("/draw", ctx => {

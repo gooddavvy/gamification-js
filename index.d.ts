@@ -1,11 +1,7 @@
 import type { Request as Request_, Response as Response_ } from "express";
 
-interface ParamsDictionary {
-    [key: string]: string;
-}
-
-export type Request = Request_<ParamsDictionary, any, any, qs.ParsedQs, Record<string, any>>
-export type Response = Response_<any, Record<string, any>, number>
+export type Request = Request_
+export type Response = Response_
 
 export interface ObjectProps {
     objectShape: "rectangle" | "cube";
@@ -23,8 +19,8 @@ export interface DrawInfo {
 }
 
 export interface RouteContext {
-    request: Request;
-    response: Response;
+    req: Request;
+    res: Response;
     title: (pageTitle: string) => string;
     setTheme: (theme: string) => string;
     setFontFamily: (fontFamily: string) => string;
