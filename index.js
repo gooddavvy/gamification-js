@@ -16,8 +16,8 @@ class Server {
         return {
           "styles": `  
                       .cube {
-                        width: ${width?.toString() || "200px"};
-                        height: ${width?.toString() || "200px"};
+                        width: ${width || "200px"};
+                        height: ${height || "200px"};
                         /* position: relative; */
                         transform-style: preserve-3d;
                         animation: rotate 5s infinite linear;
@@ -84,8 +84,8 @@ class Server {
         return {
           "styles": `
           .rectangle {
-            width: ${width?.toString() || "300px"};
-            height: ${height?.toString() || "200px"};
+            width: ${width || "300px"};
+            height: ${height || "200px"};
             position: relative;
             perspective: 1000px;
           }
@@ -196,6 +196,9 @@ class Server {
         },
         setFontFamily: fontFamily => {
           return `<style>body { font-family: ${fontFamily}; }</style>`
+        },
+        getServer: () => {
+          return this
         },
         draw: objectProps => {
           var drawing = this.draw(objectProps);

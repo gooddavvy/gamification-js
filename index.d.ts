@@ -4,11 +4,16 @@ export type Request = Request_
 export type Response = Response_
 export interface ObjectProps {
     objectShape: "rectangle" | "cube";
-    width?: number;
-    height?: number;
+    width?: string;
+    height?: string;
     backgroundColor?: string;
     labels?: {
-        [key: string]: string;
+        front?: string;
+        back?: string;
+        right?: string;
+        left?: string;
+        top?: string;
+        bottom?: string;
     }
 }
 
