@@ -1,10 +1,10 @@
 # What is GamificationJS?
 
-This is a 3D Node.js package that makes your web apps get gamified, looking like animation--and it was inspired by GoLang Fiber and Express.js; but remember it is still in progress.
+This is a 3D Node.js package that makes your web apps get gamified, looking like animation--and it was inspired by GoLang Fiber and Express.js; but remember it is still in progress. This package is very fun and easy to use, and I recommend you try it out!
 
 # Docs
 
-## Installation
+**Installation:**
 
 In order to use this package, you'll need to install it. Here are the installation steps.
 
@@ -17,21 +17,34 @@ Now write this in your Node.js file:
 
 ```js
 var Gamification = require("gamification-js");
-
 var app = new Gamification.Server();
 
+app.variables.port = ":8080";
 app.get("/", (ctx) => {
   ctx.res.send(`
-        <h1>Hello, GamificationJS!</h1>
-        <p>This is the home page.</p>
+          ${ctx.title("My First GamificationJS App!")}
+          <h1>Hello, GamificationJS!</h1>
+          <p>This is the home page.</p>
+      `);
+});
+app.get("/draw", (ctx) => {
+  ctx.res.send(`
+        ${ctx.title("Drawing with GamificationJS")}
+        <h1>This is a cube!</h1>
+        ${ctx.draw({
+          objectShape: "cube",
+          labels: { front: "My Frontie Front!!!" },
+        })}
+        <br />
+        <h1>And this is a rectangle!</h1>
+        ${ctx.draw({ objectShape: "rectangle" })}
     `);
 });
-
-app.listen(":8080", () => console.log("server started"));
+app.listen(app.variables.port, () => console.log("server started"));
 ```
 
 In this code, `:8080` represents that the port for the server is 8080. You can change this port to the port you want for your app, or leave it like that.
 
-To run this code, you run this command in the terminal: `npx nodemon server.js`. Don't forget to replace `server.js` with the actual name of your Node.js file. Now you can visit `https://localhost:8080` and it should render some HTML as expected.
+To run this code, you run this command in the terminal: `npx nodemon server.js` (`nodemon` is already installed by default when you install `gamification-js`). Don't forget to replace `server.js` with the actual name of your Node.js file. Now you can visit `http://localhost:8080` and `http://localhost:8080/draw` and it should render some HTML and drawings as expected.
 
-Happy Hacking with Gamification!
+Happy Gamifying with Gamification!
