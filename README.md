@@ -52,3 +52,47 @@ In this code, `:8080` represents that the port for the server is 8080. You can c
 To run this code, you run this command in the terminal: `npx nodemon server.js` (`nodemon` is already installed by default when you install `gamification-js`). Don't forget to replace `server.js` with the actual name of your Node.js file. Now you can visit `http://localhost:8080` and `http://localhost:8080/draw` and it should render some HTML and drawings as expected.
 
 Happy Gamifying with Gamification!
+
+## Buttons
+
+As of **May 20, 2024**, you can finally, and efficiently, work with buttons. Here's an example:
+
+```javascript
+var Gamification = require("gamification-js");
+var app = new Gamification.Server();
+
+app.variables.port = ":8080";
+app.get("/", (ctx) => {
+  ctx.res.send(`
+          ${ctx.title("My First GamificationJS App!")}
+          <h1>Hello, GamificationJS!</h1>
+          <p>This is the home page.</p>
+    `);
+});
+app.get("/draw", (ctx) => {
+  ctx.res.send(`
+        ${ctx.title("Drawing with GamificationJS")}
+        ${ctx.setTheme("dark")}
+        ${ctx.setFontFamily("Arial")}
+        <h1>This is a cube!</h1>
+        ${ctx.draw({
+          objectShape: "cube",
+          fontColor: "gray",
+          labels: { front: "My Frontie Front!!!" },
+        })}
+        <br />
+        <h1>And this is a rectangle!</h1>
+        ${ctx.draw({ objectShape: "rectangle", fontColor: "gray" })}
+
+        ${ctx.button("Click me", () => console.log("Hello, you!"))}
+        ${ctx.button("Click us", () => console.log("Hello, world!"))}
+    `);
+});
+app.run(app.variables.port, () => console.log("server started"));
+```
+
+If you click "Click me", it will log in the _terminal_ (**not** browser console), `Hello, you!`, and with that information, you should be able to tell what happens when you click "Click us".
+
+**How cool!**
+
+But the amazing part is that GamificationJS is 3D, not just a Streamlit equivalent for Node.js. Stay tuned!

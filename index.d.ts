@@ -1,21 +1,11 @@
-import type { Request as Request_, Response as Response_ } from "express";
+import type { Express, Request as Request_, Response as Response_ } from "express";
+export type { ObjectProps } from "./draw";
 
 export type Request = Request_
-export type Response = Response_
-export interface ObjectProps {
-    objectShape: "rectangle" | "cube";
-    width?: string;
-    height?: string;
-    backgroundColor?: string;
-    labels?: {
-        front?: string;
-        back?: string;
-        right?: string;
-        left?: string;
-        top?: string;
-        bottom?: string;
-    }
+export type Response = Response_ & {
+    sendJSON: (data: any) => void;
 }
+export type ExpressServer = Express;
 
 export interface DrawInfo {
     styles: string;
@@ -26,8 +16,10 @@ export interface RouteContext {
     req: Request;
     res: Response;
     title: (pageTitle: string) => string;
+    button: (label: string, onClick: () => void, styles?: Object | undefined) => void;
     setTheme: (theme: string) => string;
     setFontFamily: (fontFamily: string) => string;
+    getExpressServer: () => ExpressServer;
     draw: (objectProps: ObjectProps) => string;
 }
 

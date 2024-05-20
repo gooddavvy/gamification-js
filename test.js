@@ -15,10 +15,13 @@ app.get("/draw", ctx => {
         ${ctx.setTheme("dark")}
         ${ctx.setFontFamily("Arial")}
         <h1>This is a cube!</h1>
-        ${ctx.draw({ objectShape: "cube", backgroundColor: "gray", labels: { front: "My Frontie Front!!!" } })}
+        ${ctx.draw({ objectShape: "cube", fontColor: "gray", labels: { front: "My Frontie Front!!!" } })}
         <br />
         <h1>And this is a rectangle!</h1>
-        ${ctx.draw({ objectShape: "rectangle", backgroundColor: "gray" })}
+        ${ctx.draw({ objectShape: "rectangle", fontColor: "gray" })}
+
+        ${ctx.button("Click me", () => console.log("Hello, you!"))}
+        ${ctx.button("Click us", () => console.log("Hello, world!"))}
     `);
 })
-console.error(app.run(app.variables.port, () => console.log("server started")));
+app.run(app.variables.port, () => console.log("server started"));

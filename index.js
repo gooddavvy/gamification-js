@@ -1,168 +1,63 @@
 var express = require("express");
-
-var app = express();
+var { draw } = require("./draw");
+var sendJSON = (req, res, next) => {
+  res.sendJSON = data => {
+    res.setHeader("Content-Type", "application/json");
+    res.send(JSON.stringify(data));
+  };
+  next();
+}
 
 class Server {
   constructor() {
-    this.variables = {};
-  }
-
-  /// this function gives html draw info
-  draw(objectProps) {
-    var { objectShape, width, height, backgroundColor, labels } = objectProps;
-
-    switch (objectShape) {
-      case "cube":
-        return {
-          "styles": `  
-                      .cube {
-                        width: ${width || "200px"};
-                        height: ${height || "200px"};
-                        /* position: relative; */
-                        transform-style: preserve-3d;
-                        animation: rotate 5s infinite linear;
-                      }
-                      
-                      .cube .face {
-                        position: absolute;
-                        width: 200px;
-                        height: 200px;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        color: white;
-                        font-size: 24px;
-                        /* background-color: rgba(0, 0, 0, 0.5) */
-                        ${backgroundColor ? `background-color: ${backgroundColor};` : "background-color: rgba(0, 0, 0, 0.5);"}
-                      }
-                      
-                      .cube .front {
-                        transform: translateZ(100px);
-                      }
-                      
-                      .cube .back {
-                        transform: rotateY(180deg) translateZ(100px);
-                      }
-                      
-                      .cube .right {
-                        transform: rotateY(90deg) translateZ(100px);
-                      }
-                      
-                      .cube .left {
-                        transform: rotateY(-90deg) translateZ(100px);
-                      }
-                      
-                      .cube .top {
-                        transform: rotateX(90deg) translateZ(100px);
-                      }
-                      
-                      .cube .bottom {
-                        transform: rotateX(-90deg) translateZ(100px);
-                      }
-                      
-                      @keyframes rotate {
-                        from {
-                          transform: rotateY(0deg);
-                        }
-                        to {
-                          transform: rotateY(360deg);
-                        }
-                      }
-                      `,
-          "HTML": `
-            <div class="cube">
-                <div class="face front">${labels?.front || "Front"}</div>
-                <div class="face back">${labels?.back || "Back"}</div>
-                <div class="face right">${labels?.right || "Right"}</div>
-                <div class="face left">${labels?.left || "Left"}</div>
-                <div class="face top">${labels?.top || "Top"}</div>
-                <div class="face bottom">${labels?.bottom || "Bottom"}</div>
-            </div>
-                    `,
-        };
-      case "rectangle":
-        return {
-          "styles": `
-          .rectangle {
-            width: ${width || "300px"};
-            height: ${height || "200px"};
-            position: relative;
-            perspective: 1000px;
-          }
-          
-          .rectangle .side {
-            position: absolute;
-            width: 300px;
-            height: 200px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 24px;
-            /* background-color: rgba(0, 0, 0, 0.5); */
-            ${backgroundColor ? `background-color: ${backgroundColor};` : "background-color: rgba(0, 0, 0, 0.5);"}
-            transition: transform 0.5s;
-          }
-          
-          .rectangle .front {
-            transform: translateZ(100px);
-          }
-          
-          .rectangle .back {
-            transform: translateZ(-100px);
-          }
-          
-          .rectangle .right {
-            transform: rotateY(90deg) translateX(150px);
-          }
-          
-          .rectangle .left {
-            transform: rotateY(-90deg) translateX(-150px);
-          }
-          
-          .rectangle .top {
-            transform: rotateX(90deg) translateY(-100px);
-          }
-          
-          .rectangle .bottom {
-            transform: rotateX(-90deg) translateY(100px);
-          }
-          
-          .rectangle:hover .rectangle .side {
-            transform: rotateX(0deg) rotateY(0deg);
-          }          
-          `,
-          "HTML": `
-            <div class="rectangle">
-              <div class="side front">${labels?.front || "Front"}</div>
-              <div class="side back">${labels?.back || "Back"}</div>
-              <div class="side right">${labels?.right || "Right"}</div>
-              <div class="side left">${labels?.left || "Left"}</div>
-              <div class="side top">${labels?.top || "Top"}</div>
-              <div class="side bottom">${labels?.bottom || "Bottom"}</div>
-            </div>
-          `,
-        };
-      default:
-        return {
-          "styles": ``,
-          "HTML": `
-            <script>
-              console.log("Object shape ${objectShape} invalid or currently unsupported. Sorry if unsupported!")
-            </script>
-          `
-        }
+    this.variables = {
+      port: ":8501"
     }
+
+    this.expressApp = express();
+    this.draw = draw;
+
+    this.expressApp.use(sendJSON);
   }
 
   /// to get a route
   get(routePath, routeHandler) {
-    app.get(routePath, (req, res) => {
+    this.expressApp.get(routePath, (req, res) => {
       var context = {
         req,
         res,
         title: pageTitle => {
           return `<title>${pageTitle}</title>`;
+        },
+        button: (label, onClick, styles) => {
+          this.expressApp.get(`/gamification_/btn-handlers/${label.replace(" ", "-")}`, (_, response) => {
+            onClick();
+            response.sendJSON({ message: "Finished executing button handler" });
+          });
+          return `
+            <button
+              type="button"
+              onclick="document.gamification_fetchDataFromAPI('/gamification_/btn-handlers/${label.replace(" ", "-")}')"
+              style="margin-top: ${styles?.marginTop || "30px"}; height: ${styles?.height || "50px"}; width: ${styles?.width || "145px"}; border-radius: ${styles?.borderRadius || "12px"}; border-color: ${styles?.borderColor || "darkred"}; background-color: ${styles?.bgColor || "var(--theme-bg)"}; color: ${styles?.fontColor || "var(--theme-fc)"}; font-weight: ${styles?.fontWeight || "bold"};"
+            >${label}</button>
+            <script>
+                document.gamification_fetchDataFromAPI = async function (url) {
+                  try {
+                      const response = await fetch(url);
+                      
+                      if (!response.ok) {
+                          console.warn("Network response was not ok");
+                      }
+              
+                      const data = await response.json();
+                      return data;
+                  } catch (error) {
+                      console.error("Error fetching data:", error);
+                      return null;
+                  }
+                }
+            </script>
+          `;
         },
         setTheme: theme => {
           if (theme === "dark") {
@@ -172,6 +67,10 @@ class Server {
                   background-color: black;
                   color: white;
                 }
+                :root {
+                  --theme-bg: black;
+                  --theme-fc: white;
+                }
               </style>
             `;
           } else if (theme === "light") {
@@ -180,6 +79,10 @@ class Server {
                 body {
                   background-color: white;
                   color: black;
+                }
+                :root {
+                  --theme-bg: white;
+                  --theme-fc: black;
                 }
               </style>
             `;
@@ -191,14 +94,18 @@ class Server {
                 background-color: white;
                 color: black;
               }
+              :root {
+                --theme-bg: white;
+                --them-fc: black;
+              }
             </style>
           `;
         },
         setFontFamily: fontFamily => {
           return `<style>body { font-family: ${fontFamily}; }</style>`
         },
-        getServer: () => {
-          return this
+        getExpressServer: () => {
+          return this.expressApp;
         },
         draw: objectProps => {
           var drawing = this.draw(objectProps);
@@ -206,7 +113,7 @@ class Server {
         },
       }
       routeHandler(context);
-    })
+    });
   }
 
   /// to run the server
@@ -214,7 +121,7 @@ class Server {
     let e = null;
 
     try {
-      app.listen(parseInt(port.replace(":", "")), () => {
+      this.expressApp.listen(parseInt(port.replace(":", "")), () => {
         callback();
       });
     }
