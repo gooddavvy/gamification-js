@@ -91,8 +91,9 @@ app.get("/draw", (ctx) => {
 app.run(app.variables.port, () => console.log("server started"));
 ```
 
-If you click "Click me", it will log in the _terminal_ (**not** browser console), `Hello, you!`, and with that information, you should be able to tell what happens when you click "Click us". As you can see, with GamificationJS, you can let HTML buttons do things locally for you.
+If you click "Click me", it will log in the _terminal_ (**not** browser console), `Hello, you!`, and with that information, you should be able to tell what happens when you click "Click us".
+
+As you can see, with GamificationJS, you can let HTML buttons do things locally for you, which can be very useful in certain web development situations. **Important Note**: To avoid conflicts and/or errors, _all GamificationJS button names/labels (whichever way you call it)_ **must** be unique.
 
 **How cool!**
-
-But the amazing part is that GamificationJS is 3D, not just a Streamlit equivalent for Node.js. Stay tuned!
+Stay tuned!

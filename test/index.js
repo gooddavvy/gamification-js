@@ -1,4 +1,4 @@
-var Gamification = require("./");
+var Gamification = require("../");
 var app = new Gamification.Server();
 
 app.variables.port = process.env["PORT"] || ":2010";
